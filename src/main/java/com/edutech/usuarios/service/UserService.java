@@ -13,9 +13,14 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
+/*
     // metodo para obtener todos los usuarios
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+*/
 }

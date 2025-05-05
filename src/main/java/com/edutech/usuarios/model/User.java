@@ -34,9 +34,16 @@ public class User {
     @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
     private String password;
 
-    public User(String name, String email, String password) {
+
+    private Integer role;
+
+    private Integer status;
+
+    public User(String name, String email, String password,Integer role, Integer status) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = role;
+        this.status = status;
     }
 }

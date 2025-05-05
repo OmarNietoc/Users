@@ -16,8 +16,8 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        User user1 = new User("John Doe", "user1@gmail.com", "password1");
-        User user2 = new User("Jona Hill", "user2@gmail.com", "password2");
+        User user1 = new User("John Doe", "user1@gmail.com", "password1",1,1);
+        User user2 = new User("Jona Hill", "user2@gmail.com", "password2",2,0);
 
         userRepository.save(user1);
         userRepository.save(user2);
