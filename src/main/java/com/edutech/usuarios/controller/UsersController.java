@@ -3,6 +3,8 @@ package com.edutech.usuarios.controller;
 import com.edutech.usuarios.controller.response.MessageResponse;
 import com.edutech.usuarios.service.UserService;
 import jakarta.annotation.PostConstruct;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,9 +60,18 @@ public class UsersController {
                 userRepository.save(user);
                 return ResponseEntity.status(HttpStatus.CREATED)
                         .body(new MessageResponse("Usuario agregado exitosamente."));
+            } catch (ConstraintViolationException e) {
+                // Extrae solo los mensajes de violación
+                String mensaje = e.getConstraintViolations()
+                        .stream()
+                        .map(ConstraintViolation::getMessage)
+                        .findFirst()
+                        .orElse("Error de validación");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new MessageResponse("Error al crear el usuario: '" + mensaje + "'"));
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new MessageResponse("Error al crear el usuario: " + e.getMessage()));
+                        .body(new MessageResponse("Error inesperado al crear el usuario: " + e.getMessage()));
             }
 
         }

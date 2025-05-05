@@ -2,15 +2,14 @@ package com.edutech.usuarios.model;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+
 @Entity
 @Table(name = "users")
 @Data  // Lombok genera getters, setters, equals, hashCode y toString automáticamente
@@ -22,21 +21,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "El nombre no puede estar vacío")
-    @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
+    @NotEmpty(message = "'name' no puede estar vacío")
+    @Size(min = 4, max = 100, message = "'name' debe tener entre 4 y 100 caracteres")
     private String name;
 
-    @Email(message = "El correo debe ser válido")
-    @NotEmpty(message = "El correo no puede estar vacío")
+    @Email(message = "'email' debe ser válido")
+    @NotEmpty(message = "'email' no puede estar vacío")
     private String email;
 
-    @NotEmpty(message = "La contraseña no puede estar vacía")
-    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
+    @NotEmpty(message = "'password' no puede estar vacía")
+    @Size(min = 6, message = "'password' debe tener al menos 6 caracteres")
     private String password;
 
-
+    @NotNull(message = "'role' no puede ser nulo")
+    @Min(value = 0, message = "'role' debe ser mayor o igual a 0")
     private Integer role;
 
+    @NotNull(message = "'status' no puede ser nulo")
+    @Min(value = 0, message = "El 'status' debe ser 1 o 0")
+    @Max(value = 1, message = "El 'status' debe ser 1 o 0")
     private Integer status;
 
     public User(String name, String email, String password,Integer role, Integer status) {
