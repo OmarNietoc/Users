@@ -33,16 +33,25 @@ public class User {
     @Size(min = 6, message = "'password' debe tener al menos 6 caracteres")
     private String password;
 
+    @ManyToOne(fetch = FetchType.EAGER) // EAGER para que cargue el rol junto con el usuario
+    @JoinColumn(name = "id_role", nullable = false)
+    @NotNull(message = "'role' no puede ser nulo")
+    private Role role;
+
+    /*
     @NotNull(message = "'role' no puede ser nulo")
     @Min(value = 0, message = "'role' debe ser mayor o igual a 0")
     private Integer role;
+    */
+
+
 
     @NotNull(message = "'status' no puede ser nulo")
     @Min(value = 0, message = "El 'status' debe ser 1 o 0")
     @Max(value = 1, message = "El 'status' debe ser 1 o 0")
     private Integer status;
 
-    public User(String name, String email, String password,Integer role, Integer status) {
+    public User(String name, String email, String password,Role role, Integer status) {
         this.name = name;
         this.email = email;
         this.password = password;

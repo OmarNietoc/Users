@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users")
+@Table(name = "role")
 @Data  // Lombok genera getters, setters, equals, hashCode y toString automáticamente
 @NoArgsConstructor  // Constructor vacío por defecto (necesario para JPA)
 @AllArgsConstructor  // Constructor con todos los parámetros, útil si lo necesitas para la creación rápida de instancias

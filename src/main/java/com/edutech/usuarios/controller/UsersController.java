@@ -1,6 +1,7 @@
 package com.edutech.usuarios.controller;
 
 import com.edutech.usuarios.controller.response.MessageResponse;
+import com.edutech.usuarios.repository.RoleRepository;
 import com.edutech.usuarios.service.UserService;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.ConstraintViolation;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.edutech.usuarios.model.User;
+import com.edutech.usuarios.model.Role;
 
 @RestController
 @RequestMapping("/users")
@@ -30,6 +32,8 @@ public class UsersController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     //get para listar usuarios
         @GetMapping
@@ -56,6 +60,14 @@ public class UsersController {
             try {
                 // Asegurarse de que el ID venga nulo (o ignorar si viene)
                 user.setId(null);
+                if (userRepository.existsByEmail(user.getEmail())) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(new MessageResponse("Ya existe un usuario con ese correo."));
+                }
+                if (!roleRepository.existsById(user.getRole().getId())) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(new MessageResponse("El rol no existe."));
+                }
 
                 userRepository.save(user);
                 return ResponseEntity.status(HttpStatus.CREATED)
