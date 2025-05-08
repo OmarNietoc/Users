@@ -20,14 +20,6 @@ import com.edutech.usuarios.model.Role;
 @RequestMapping("/edutech/users")
 public class UserController {
 
-    //private final UserService userService;
-
-    // Inyección de dependencia a través del constructor
-    /*public UsersController(UserService userService) {
-        this.userService = userService;
-    }*/
-
-
     @Autowired
     private UserRepository userRepository;
     @Autowired

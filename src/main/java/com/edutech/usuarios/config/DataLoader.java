@@ -23,19 +23,19 @@ public class DataLoader implements CommandLineRunner {
 
         // Crear roles si no existen
         Role adminRole = roleRepository.findByName("ADMIN").orElseGet(() ->
-                roleRepository.save(new Role(null, "ADMIN")));
+                roleRepository.save(new Role( "ADMIN")));
 
         Role userRole = roleRepository.findByName("USER").orElseGet(() ->
-                roleRepository.save(new Role(null, "USER")));
+                roleRepository.save(new Role("USER")));
 
         Role instructorRole = roleRepository.findByName("INSTRUCTOR").orElseGet(() ->
-                roleRepository.save(new Role(null, "INSTRUCTOR")));
+                roleRepository.save(new Role("INSTRUCTOR")));
 
         Role supportRole = roleRepository.findByName("SUPPORT").orElseGet(() ->
-                roleRepository.save(new Role(null, "SUPPORT")));
+                roleRepository.save(new Role( "SUPPORT")));
 
         Role managerRole = roleRepository.findByName("MANAGER").orElseGet(() ->
-                roleRepository.save(new Role(null, "MANAGER")));
+                roleRepository.save(new Role( "MANAGER")));
 
         // Crear usuarios
         User user1 = new User("Eric Cartman", "eric.cartman@southpark.com", "user123", userRole, 0);  // South Park

@@ -1,3 +1,4 @@
+
 package com.edutech.usuarios.service;
 
 import com.edutech.usuarios.model.User;
@@ -5,7 +6,7 @@ import com.edutech.usuarios.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-@Service
+
 public class UserService {
     private final UserRepository userRepository;
 
