@@ -4,6 +4,7 @@ import com.edutech.usuarios.controller.response.MessageResponse;
 import com.edutech.usuarios.model.Role;
 import com.edutech.usuarios.model.User;
 import com.edutech.usuarios.repository.RoleRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,14 +40,14 @@ public class RoleController {
 
 
     @PostMapping
-    public ResponseEntity<MessageResponse> addRole(@RequestBody Role role) {
+    public ResponseEntity<MessageResponse> addRole(@Valid @RequestBody Role role) {
         roleRepository.save(role);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new MessageResponse("Rol creado exitosamente."));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MessageResponse> updateRole(@PathVariable Long id, @RequestBody Role roleDetails) {
+    public ResponseEntity<MessageResponse> updateRole(@PathVariable Long id, @Valid @RequestBody Role roleDetails) {
         Optional<Role> optionalRole = roleRepository.findById(id);
         if (optionalRole.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

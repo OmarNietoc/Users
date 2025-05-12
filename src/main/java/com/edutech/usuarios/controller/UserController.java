@@ -4,6 +4,7 @@ import com.edutech.usuarios.controller.response.MessageResponse;
 import com.edutech.usuarios.repository.RoleRepository;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +46,8 @@ public class UserController {
             }
         }
 
-    @PostMapping("/add")
-    public ResponseEntity<MessageResponse> addUser(@RequestBody User user) {
+    @PostMapping
+    public ResponseEntity<MessageResponse> addUser(@Valid @RequestBody User user) {
 
         try {
             // Asegurarse de que el ID venga nulo (o ignorar si viene)
@@ -78,7 +79,7 @@ public class UserController {
         }
     }
         @PutMapping("/{id}")
-        public ResponseEntity<MessageResponse> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+        public ResponseEntity<MessageResponse> updateUser(@PathVariable Long id, @Valid @RequestBody User userDetails) {
             Optional<User> optionalUser = userRepository.findById(id);
             if (optionalUser.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
