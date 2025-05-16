@@ -1,6 +1,7 @@
 package com.edutech.usuarios.controller;
 
 import com.edutech.usuarios.controller.response.MessageResponse;
+import com.edutech.usuarios.dto.UserDto;
 import com.edutech.usuarios.repository.RoleRepository;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -47,20 +48,26 @@ public class UserController {
         }
 
     @PostMapping
-    public ResponseEntity<MessageResponse> addUser(@Valid @RequestBody User user) {
+    public ResponseEntity<MessageResponse> addUser(@Valid @RequestBody UserDto userDto) {
 
         try {
             // Asegurarse de que el ID venga nulo (o ignorar si viene)
-            user.setId(null);
-            if (userRepository.existsByEmail(user.getEmail())) {
+            if (userRepository.existsByEmail(userDto.getEmail())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new MessageResponse("Ya existe un usuario con ese correo."));
             }
-            if (!roleRepository.existsById(user.getRole().getId())) {
+            Optional<Role> roleOptional = roleRepository.findById(userDto.getRole());
+            if (roleOptional.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new MessageResponse("El rol no existe."));
             }
-
+            User user = new User(
+                    userDto.getName(),
+                    userDto.getEmail(),
+                    userDto.getPassword(),
+                    roleOptional.get(),
+                    userDto.getStatus()
+            );
             userRepository.save(user);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new MessageResponse("Usuario agregado exitosamente."));
@@ -79,11 +86,26 @@ public class UserController {
         }
     }
         @PutMapping("/{id}")
-        public ResponseEntity<MessageResponse> updateUser(@PathVariable Long id, @Valid @RequestBody User userDetails) {
+        public ResponseEntity<MessageResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UserDto userDetails) {
             Optional<User> optionalUser = userRepository.findById(id);
             if (optionalUser.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new MessageResponse("Usuario con ID " + id + " no encontrado."));
+            }
+
+            if (userRepository.existsByEmailAndIdNot(userDetails.getEmail(), id)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new MessageResponse("Ya existe otro usuario con ese correo."));
+            }
+
+
+
+
+            // Validar que el rol exista
+            Optional<Role> roleOptional = roleRepository.findById(userDetails.getRole());
+            if (roleOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new MessageResponse("El rol no existe."));
             }
 
             User user = optionalUser.get();
@@ -91,15 +113,7 @@ public class UserController {
             user.setEmail(userDetails.getEmail());
             user.setPassword(userDetails.getPassword());
             user.setStatus(userDetails.getStatus());
-
-
-            // Validar que el rol exista
-            if (userDetails.getRole() != null && !roleRepository.existsById(userDetails.getRole().getId())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new MessageResponse("El rol especificado no existe."));
-            }
-
-            user.setRole(userDetails.getRole());
+            user.setRole(roleOptional.get());
 
             userRepository.save(user);
             return ResponseEntity.ok(new MessageResponse("Usuario actualizado exitosamente."));
