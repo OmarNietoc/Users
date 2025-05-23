@@ -4,6 +4,8 @@ import com.edutech.usuarios.exception.ResourceNotFoundException;
 import com.edutech.usuarios.model.Role;
 
 import com.edutech.usuarios.repository.RoleRepository;
+import com.edutech.usuarios.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class RoleService {
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
 
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
@@ -38,6 +41,11 @@ public class RoleService {
     }
 
     public void deleteById(Long id) {
+        Role role = getRoleById(id);
+        if (userRepository.existsUserByRoleId(id)) {
+            throw new IllegalStateException("No se puede eliminar el rol porque hay usuarios asociados.");
+        }
+
         roleRepository.deleteById(id);
     }
 
