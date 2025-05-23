@@ -1,15 +1,14 @@
 package com.edutech.usuarios.service;
 
-import com.edutech.usuarios.controller.response.MessageResponse;
+
 import com.edutech.usuarios.dto.UserDto;
 import com.edutech.usuarios.exception.ResourceNotFoundException;
 import com.edutech.usuarios.model.User;
 import com.edutech.usuarios.model.Role;
-import com.edutech.usuarios.repository.RoleRepository;
+
 import com.edutech.usuarios.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,9 +48,6 @@ public class UserService {
     }
 
     public void deleteUserById(Long id) {
-        User user = getUserById(id);
-
-
         userRepository.deleteById(id);
     }
 
@@ -68,8 +64,7 @@ public class UserService {
         }
 
         // Validación de rol
-        return roleService.getRoleById(roleId)
-                .orElseThrow(() -> new IllegalArgumentException("El rol no existe."));
+        return roleService.getRoleById(roleId);
     }
 
 

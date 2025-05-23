@@ -28,15 +28,8 @@ public class RoleController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
-        Optional<Role> role = roleService.getRoleById(id);
-        if (role.isPresent()) {
-            return ResponseEntity.ok(role.get());
-        } else {
-            MessageResponse response = MessageResponse.builder()
-                    .message("Role con ID " + id + " no encontrado.")
-                    .build();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
+        Role role = roleService.getRoleById(id);
+        return ResponseEntity.ok(role);
     }
 
 
@@ -55,10 +48,7 @@ public class RoleController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<MessageResponse> deleteRole(@PathVariable Long id) {
-        if (!roleService.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse("Rol no encontrado."));
-        }
+        roleService.getRoleById(id);
         roleService.deleteById(id);
         return ResponseEntity.ok(new MessageResponse("Rol eliminado exitosamente."));
     }

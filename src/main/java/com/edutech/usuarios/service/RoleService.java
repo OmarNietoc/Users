@@ -1,11 +1,12 @@
 package com.edutech.usuarios.service;
 
+import com.edutech.usuarios.exception.ResourceNotFoundException;
 import com.edutech.usuarios.model.Role;
+
 import com.edutech.usuarios.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.RoleNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +20,13 @@ public class RoleService {
         return roleRepository.findAll();
     }
 
-    public Optional<Role> getRoleById(Long id) {
-        return roleRepository.findById(id);
+    public Role getRoleById(Long id) {
+        Optional <Role> roleOpt = roleRepository.findById(id);
+        if (roleOpt.isEmpty()) {
+            throw new ResourceNotFoundException("Role no encontrado"  );
+        }
+        Role roleFound = roleOpt.get();
+        return roleFound;
     }
 
     public boolean existsById(Long id) {
@@ -36,9 +42,7 @@ public class RoleService {
     }
 
     public void updateRole(Long id, Role roleDetails) {
-        Role existingRole = roleRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Rol con ID " + id + " no encontrado."));
-
+        Role existingRole = getRoleById(id);
         existingRole.setName(roleDetails.getName());
         roleRepository.save(existingRole);
     }
