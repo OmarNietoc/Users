@@ -27,16 +27,26 @@ public class ExceptionManager {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
+    //404
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> handleResourceNotFound(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new MessageResponse(ex.getMessage()));
     }
 
+    //400
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<MessageResponse> handleIllegalArgument(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(ex.getMessage()));
     }
+
+    //409
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<?> handleConflict(ConflictException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new MessageResponse(ex.getMessage()));
+    }
+
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<?> handleConstraintViolation(ConstraintViolationException ex) {

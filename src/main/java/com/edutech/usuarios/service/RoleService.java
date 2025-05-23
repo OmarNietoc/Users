@@ -1,5 +1,6 @@
 package com.edutech.usuarios.service;
 
+import com.edutech.usuarios.exception.ConflictException;
 import com.edutech.usuarios.exception.ResourceNotFoundException;
 import com.edutech.usuarios.model.Role;
 
@@ -43,7 +44,7 @@ public class RoleService {
     public void deleteById(Long id) {
         Role role = getRoleById(id);
         if (userRepository.existsUserByRoleId(id)) {
-            throw new IllegalStateException("No se puede eliminar el rol porque hay usuarios asociados.");
+            throw new ConflictException("No se puede eliminar el rol porque hay usuarios asociados.");
         }
 
         roleRepository.deleteById(id);
