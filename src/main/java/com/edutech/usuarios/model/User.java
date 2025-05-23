@@ -18,7 +18,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ ]+$", message = "'name' solo puede contener letras y espacios")
     @NotEmpty(message = "'name' no puede estar vacío")
     @Size(min = 4, max = 100, message = "'name' debe tener entre 4 y 100 caracteres")
     private String name;
@@ -41,8 +41,6 @@ public class User {
     @Min(value = 0, message = "'role' debe ser mayor o igual a 0")
     private Integer role;
     */
-
-
 
     @NotNull(message = "'status' no puede ser nulo")
     @Min(value = 0, message = "El 'status' debe ser 1 o 0")

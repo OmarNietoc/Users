@@ -4,6 +4,7 @@ import com.edutech.usuarios.controller.response.MessageResponse;
 import com.edutech.usuarios.model.Role;
 import com.edutech.usuarios.model.User;
 import com.edutech.usuarios.repository.RoleRepository;
+import com.edutech.usuarios.service.RoleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +19,16 @@ import java.util.Optional;
 public class RoleController {
 
     @Autowired
-    private RoleRepository roleRepository;
+    private RoleService roleService;
 
     @GetMapping
     public ResponseEntity<List<Role>> getAllRoles() {
-        return ResponseEntity.ok(roleRepository.findAll());
+        return ResponseEntity.ok(roleService.getAllRoles());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
-        Optional<Role> role = roleRepository.findById(id);
+        Optional<Role> role = roleService.getRoleById(id);
         if (role.isPresent()) {
             return ResponseEntity.ok(role.get());
         } else {
@@ -41,32 +42,24 @@ public class RoleController {
 
     @PostMapping
     public ResponseEntity<MessageResponse> addRole(@Valid @RequestBody Role role) {
-        roleRepository.save(role);
+        roleService.save(role);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new MessageResponse("Rol creado exitosamente."));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<MessageResponse> updateRole(@PathVariable Long id, @Valid @RequestBody Role roleDetails) {
-        Optional<Role> optionalRole = roleRepository.findById(id);
-        if (optionalRole.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse("Rol no encontrado."));
-        }
-
-        Role role = optionalRole.get();
-        role.setName(roleDetails.getName());
-        roleRepository.save(role);
+        roleService.updateRole(id, roleDetails);
         return ResponseEntity.ok(new MessageResponse("Rol actualizado exitosamente."));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<MessageResponse> deleteRole(@PathVariable Long id) {
-        if (!roleRepository.existsById(id)) {
+        if (!roleService.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new MessageResponse("Rol no encontrado."));
         }
-        roleRepository.deleteById(id);
+        roleService.deleteById(id);
         return ResponseEntity.ok(new MessageResponse("Rol eliminado exitosamente."));
     }
 }
