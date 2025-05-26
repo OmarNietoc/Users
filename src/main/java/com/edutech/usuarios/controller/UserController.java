@@ -8,6 +8,7 @@ import com.edutech.usuarios.service.UserService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +22,11 @@ import com.edutech.usuarios.model.User;
 import com.edutech.usuarios.model.Role;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/edutech/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private RoleService roleService;
+    private final UserService userService;
 
     //get para listar usuarios
         @GetMapping

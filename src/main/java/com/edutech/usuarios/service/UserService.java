@@ -7,6 +7,7 @@ import com.edutech.usuarios.model.User;
 import com.edutech.usuarios.model.Role;
 
 import com.edutech.usuarios.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -15,12 +16,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private RoleService roleService;
+    private final UserRepository userRepository;
+
+    private final RoleService roleService;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
