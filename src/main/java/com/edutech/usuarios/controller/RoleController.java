@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/edutech/roles")
+@RequestMapping("/edutech/users/roles")
 public class RoleController {
 
     @Autowired
@@ -33,7 +33,7 @@ public class RoleController {
     }
 
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<MessageResponse> addRole(@Valid @RequestBody Role role) {
         roleService.save(role);
         return ResponseEntity.status(HttpStatus.CREATED)
