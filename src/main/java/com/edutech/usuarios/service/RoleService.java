@@ -37,7 +37,15 @@ public class RoleService {
         return roleRepository.existsById(id);
     }
 
-    public Role save(Role role) {
+    public boolean validateRoleByName(String name) {
+        if (roleRepository.existsByNameIgnoreCase(name)) {
+            throw new ConflictException("Ya existe un rol con ese nombre.");
+        }
+        return true;
+    }
+
+    public Role createRole(Role role) {
+        validateRoleByName(role.getName());
         return roleRepository.save(role);
     }
 
@@ -52,8 +60,11 @@ public class RoleService {
 
     public void updateRole(Long id, Role roleDetails) {
         Role existingRole = getRoleById(id);
-        existingRole.setName(roleDetails.getName());
-        roleRepository.save(existingRole);
+        if(validateRoleByName(roleDetails.getName())){
+            existingRole.setName(roleDetails.getName());
+            roleRepository.save(existingRole);
+        }
+
     }
 
 }

@@ -35,7 +35,7 @@ public class RoleController {
 
     @PostMapping("/add")
     public ResponseEntity<MessageResponse> addRole(@Valid @RequestBody Role role) {
-        roleService.save(role);
+        roleService.createRole(role);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new MessageResponse("Rol creado exitosamente."));
     }
